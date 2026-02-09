@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Valentine 💘</title>
+
+<style>
+    body {
+        margin: 0;
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #ffe4e1;
+        font-family: 'Segoe UI', sans-serif;
+        text-align: center;
+        overflow: hidden;
+    }
+
+    #container {
+        background: white;
+        padding: 30px;
+        border-radius: 20px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        z-index: 2;
+    }
+
+    h1 {
+        color: #d63384;
+    }
+
+    img {
+        width: 250px;
+        border-radius: 15px;
+        margin: 20px 0;
+    }
+
+    .buttons {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        height: 50px;
+        position: relative;
+    }
+
+    button {
+        padding: 10px 25px;
+        font-size: 1.2rem;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+    }
+
+    #yesBtn {
+        background: #4caf50;
+        color: white;
+    }
+
+    #noBtn {
+        background: #f44336;
+        color: white;
+        position: absolute;
+        left: 55%;
+    }
+
+    canvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+        pointer-events: none;
+    }
+</style>
+</head>
+
+<body>
+
+<canvas id="confetti"></canvas>
+
+<audio id="music" loop>
+    <source src="https://www.bensound.com/bensound-music/bensound-love.mp3" type="audio/mpeg">
+</audio>
+
+<div id="container">
+    <h1 id="question">Will you be my Valentine? 🥺</h1>
+
+    <img id="gif"
+         src="https://media.giphy.com/media/qUIm5wu6LAAog/giphy.gif"
+         alt="Cute">
+
+    <div class="buttons">
+        <button id="yesBtn" onclick="celebrate()">Yes!</button>
+        <button id="noBtn" onmouseover="moveButton()">No</button>
+    </div>
+</div>
+
+<script>
+/* ✏️ CHANGE THESE NAMES */
+const fromName = "Your Name";
+const toName = "Their Name";
+
+/* No button escape */
+function moveButton() {
+    const btn = document.getElementById("noBtn");
+    btn.style.position = "fixed";
+    btn.style.left = Math.random() * (window.innerWidth - btn.offsetWidth) + "px";
+    btn.style.top = Math.random() * (window.innerHeight - btn.offsetHeight) + "px";
+}
+
+/* Celebration */
+function celebrate() {
+    document.getElementById("question").innerHTML =
+        `Happy Valentine’s Day, ${toName}! ❤️<br>Love, ${fromName}`;
+
+    document.getElementById("gif").src =
+        "https://media.giphy.com/media/l41lI4bYusHOqzUMo/giphy.gif";
+
+    document.getElementById("noBtn").style.display = "none";
+    document.body.style.background = "#ffc0cb";
+
+    document.getElementById("music").play();
+    startConfetti();
+}
+
+/* Confetti */
+const canvas = document.getElementById("confetti");
+const ctx = canvas.getContext("2d");
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let pieces = [];
+
+function startConfetti() {
+    for (let i = 0; i < 200; i++) {
+        pieces.push({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            size: Math.random() * 8 + 4,
+            speed: Math.random() * 3 + 2,
+            color: `hsl(${Math.random() * 360}, 100%, 70%)`
+        });
+    }
+    requestAnimationFrame(updateConfetti);
+}
+
+function updateConfetti() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    pieces.forEach(p => {
+        p.y += p.speed;
+        if (p.y > canvas.height) p.y = -10;
+        ctx.fillStyle = p.color;
+        ctx.fillRect(p.x, p.y, p.size, p.size);
+    });
+    requestAnimationFrame(updateConfetti);
+}
+</script>
+
+</body>
+</html>
